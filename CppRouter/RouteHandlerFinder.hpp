@@ -2,6 +2,7 @@
 #define CPPROUTER_DETAILS_ROUTEHANDLERFINDER_HPP
 
 #include <CppRouter/GenericHandler.hpp>
+#include <CppRouter/RouteMatcher.hpp>
 
 #include <memory>
 #include <stdexcept>
@@ -15,7 +16,8 @@ struct RouteHandlerFinder
 {
     static std::unique_ptr<GenericHandler> find(const std::string& request)
     {
-        return std::string(First::route) == request
+        RouteMatcher<First> matcher{};
+        return matcher(request)
                 ? std::make_unique<First>()
                 : RouteHandlerFinder<Tail...>::find(request);
     }
@@ -26,7 +28,8 @@ struct RouteHandlerFinder<Last>
 {
     static std::unique_ptr<GenericHandler> find(const std::string &request)
     {
-        if(std::string(Last::route) == request)
+        RouteMatcher<Last> matcher{};
+        if(matcher(request))
             return std::make_unique<Last>();
 
         throw std::runtime_error("No handler for route: " + request);
