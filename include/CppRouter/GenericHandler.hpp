@@ -3,6 +3,15 @@
 
 namespace CppRouter {
 
+struct Constraint
+{
+    const char* constraint;
+
+    Constraint(const char* c)
+        : constraint(c)
+    {}
+};
+
 class GenericHandler
 {
 public:
