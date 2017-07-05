@@ -2,7 +2,7 @@
 #define CPPROUTER_DETAILS_ROUTEHANDLERFINDER_HPP
 
 #include <CppRouter/GenericHandler.hpp>
-#include <CppRouter/RouteMatcher.hpp>
+#include <CppRouter/details/RouteMatcher.hpp>
 
 #include <memory>
 #include <stdexcept>

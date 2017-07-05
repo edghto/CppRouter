@@ -1,7 +1,7 @@
 #ifndef CPPROUTER_ROUTER_HPP
 #define CPPROUTER_ROUTER_HPP
 
-#include <CppRouter/RouteHandlerFinder.hpp>
+#include <CppRouter/details/RouteHandlerFinder.hpp>
 
 namespace CppRouter {
 

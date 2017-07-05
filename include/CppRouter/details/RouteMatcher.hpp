@@ -9,7 +9,7 @@
 #include <FusionVisitor/for_each.hpp>
 
 #include <CppRouter/DefaultConstraints.hpp>
-#include <CppRouter/ParameterManager.hpp>
+#include <CppRouter/details/ParameterManager.hpp>
 
 namespace CppRouter {
 namespace details {
