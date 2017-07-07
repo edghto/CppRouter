@@ -1,10 +1,10 @@
 #ifndef CPPROUTER_DERAILS_ROUTEMATCHER_HPP
 #define CPPROUTER_DERAILS_ROUTEMATCHER_HPP
 
-#include <regex>
 #include <string>
 
 #include <boost/format.hpp>
+#include <boost/regex.hpp>
 
 #include <FusionVisitor/for_each.hpp>
 
@@ -34,9 +34,9 @@ private:
         std::string route = routeDesc;
         for(auto constraint : constraints)
         {
-            auto paramPlaceHolder = std::regex(str(boost::format("\\{%s\\}") % constraint.first));
-            auto paramConstraint = str(boost::format("(%s)") % constraint.second);
-            route = std::regex_replace(route,
+            auto paramPlaceHolder = boost::regex(str(boost::format("\\{%s\\}") % constraint.first));
+            auto paramConstraint = str(boost::format("(?<%s>%s)") % constraint.first % constraint.second);
+            route = boost::regex_replace(route,
                                       paramPlaceHolder,
                                       paramConstraint);
         }
@@ -55,10 +55,10 @@ private:
 
     bool match(std::string routeDesc, const std::string& request)
     {
-        std::cmatch m;
-        std::regex re(routeDesc);
+        boost::smatch m;
+        boost::regex re(routeDesc);
 
-        if(!std::regex_match(request.c_str(), m, re))
+        if(!boost::regex_match(request.begin(), request.end(), m, re))
             return false;
 
         return true;

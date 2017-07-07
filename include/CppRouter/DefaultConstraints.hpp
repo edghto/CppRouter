@@ -14,13 +14,13 @@ namespace DefaultConstraints {
     template<>
     std::string get(int)
     {
-        return "-?\\d+";
+        return R"(-?\\d+)";
     }
 
     template<>
     std::string get(std::string)
     {
-        return "[\\w_-]+";
+        return R"([\\w_-]+)";
     }
 
     template<>
