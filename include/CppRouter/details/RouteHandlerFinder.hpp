@@ -17,9 +17,11 @@ struct RouteHandlerFinder
     static std::unique_ptr<GenericHandler> find(const std::string& request)
     {
         RouteMatcher<First> matcher{};
-        return matcher(request)
-                ? std::make_unique<First>()
-                : RouteHandlerFinder<Tail...>::find(request);
+
+        if(matcher(request))
+            return std::make_unique<First>(matcher.params);
+        else
+            return RouteHandlerFinder<Tail...>::find(request);
     }
 };
 
@@ -30,7 +32,7 @@ struct RouteHandlerFinder<Last>
     {
         RouteMatcher<Last> matcher{};
         if(matcher(request))
-            return std::make_unique<Last>();
+            return std::make_unique<Last>(matcher.params);
 
         throw std::runtime_error("No handler for route: " + request);
     }

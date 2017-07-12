@@ -10,6 +10,7 @@
 
 #include <CppRouter/DefaultConstraints.hpp>
 #include <CppRouter/details/ParameterManager.hpp>
+#include <CppRouter/details/ParameterExtractor.hpp>
 
 namespace CppRouter {
 namespace details {
@@ -24,8 +25,15 @@ struct RouteMatcher
 
         auto route = constructRoute(routeDesc, constraints);
 
-        return match(route, request);
+        auto isMatched = match(route, request);
+
+        if(isMatched)
+            extractParameters();
+
+        return isMatched;
     }
+
+    typename RouteHandler::Params params{};
 
 private:
     std::string constructRoute(const std::string& routeDesc,
@@ -47,7 +55,6 @@ private:
     decltype(ParameterManager::parameterConstraints) parameterConstraints()
     {
         ParameterManager parameterManager{};
-        typename RouteHandler::Params params{};
         StructIterator::Fusion<typename RouteHandler::Params>::for_each(params, parameterManager);
 
         return std::move(parameterManager.parameterConstraints);
@@ -55,14 +62,22 @@ private:
 
     bool match(std::string routeDesc, const std::string& request)
     {
-        boost::smatch m;
+        //TODO clear matches_ on every run
         boost::regex re(routeDesc);
 
-        if(!boost::regex_match(request.begin(), request.end(), m, re))
+        if(!boost::regex_match(request.begin(), request.end(), matches_, re))
             return false;
 
         return true;
     }
+
+    auto extractParameters()
+    {
+        ParameterExtractor extractor{matches_};
+        StructIterator::Fusion<typename RouteHandler::Params>::for_each(params, extractor);
+    }
+
+    boost::smatch matches_;
 };
 
 } // namespace details
