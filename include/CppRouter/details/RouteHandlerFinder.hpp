@@ -8,8 +8,17 @@
 #include <stdexcept>
 #include <string>
 
+#include <boost/di.hpp>
+
 namespace CppRouter {
 namespace details {
+
+template<typename Handler, typename Matcher>
+auto make_handler(Matcher& m)
+{
+    auto injector = m.params();
+    return injector.template create<std::unique_ptr<Handler>>();
+}
 
 template<typename First, typename ...Tail>
 struct RouteHandlerFinder
@@ -19,7 +28,7 @@ struct RouteHandlerFinder
         RouteMatcher<First> matcher{};
 
         if(matcher(request))
-            return std::make_unique<First>(matcher.params);
+            return make_handler<First>(matcher);
         else
             return RouteHandlerFinder<Tail...>::find(request);
     }
@@ -32,7 +41,7 @@ struct RouteHandlerFinder<Last>
     {
         RouteMatcher<Last> matcher{};
         if(matcher(request))
-            return std::make_unique<Last>(matcher.params);
+            return make_handler<Last>(matcher);
 
         throw std::runtime_error("No handler for route: " + request);
     }
