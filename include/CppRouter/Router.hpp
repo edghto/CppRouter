@@ -35,7 +35,7 @@ class Router
 };
 
 template <typename... Handlers>
-auto make_router()
+auto makeRouter()
 {
     return Router<Handlers...>();
 }

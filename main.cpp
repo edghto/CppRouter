@@ -9,7 +9,7 @@
 
 int main()
 {
-    auto router = CppRouter::make_router<PostFooAction,GetFoo>();
+    auto router = CppRouter::makeRouter<PostFooAction,GetFoo>();
 
     std::set<std::string> endpoints = {"/api/foo/15", "/api/foo/30/action/boo", "api/foo", "/api/foo/boo", "/api/foo/30/action/"};
 
