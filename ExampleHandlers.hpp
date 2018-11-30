@@ -3,7 +3,6 @@
 
 #include <CppRouter/GenericHandler.hpp>
 #include <string>
-#include <boost/fusion/adapted/struct.hpp>
 
 class PostFooAction
     : public CppRouter::GenericHandler
@@ -53,7 +52,6 @@ public:
     }
 };
 
-
 BOOST_FUSION_ADAPT_STRUCT(
     PostFooAction::Params,
     (int, id)
@@ -66,6 +64,5 @@ BOOST_FUSION_ADAPT_STRUCT(
     (int, id)
     (CppRouter::Constraint, id_constraints)
 );
-
 
 #endif // EXAMPLEHANDLERS_HPP

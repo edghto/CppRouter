@@ -1,9 +1,10 @@
 #ifndef CPPROUTER_DETAILS_PARAMETEREXTRACTOR_HPP
 #define CPPROUTER_DETAILS_PARAMETEREXTRACTOR_HPP
 
+#include <CppRouter/GenericHandler.hpp>
+
 #include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
-#include <CppRouter/GenericHandler.hpp>
 
 namespace CppRouter {
 namespace details {
@@ -26,6 +27,5 @@ struct ParameterExtractor
 
 } // namespace details
 } // namespace CppRouter
-
 
 #endif // CPPROUTER_DETAILS_PARAMETEREXTRACTOR_HPP

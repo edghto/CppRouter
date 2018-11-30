@@ -1,9 +1,10 @@
 #ifndef CPPROUTER_DEFAULTCONSTRAINTS_HPP
 #define CPPROUTER_DEFAULTCONSTRAINTS_HPP
 
+#include <CppRouter/GenericHandler.hpp>
+
 #include <string>
 #include <utility>
-#include <CppRouter/GenericHandler.hpp>
 
 namespace CppRouter {
 namespace DefaultConstraints {

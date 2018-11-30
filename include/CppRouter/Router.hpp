@@ -1,29 +1,40 @@
 #ifndef CPPROUTER_ROUTER_HPP
 #define CPPROUTER_ROUTER_HPP
 
-#include <CppRouter/details/RouteHandlerFinder.hpp>
+#include <CppRouter/GenericHandler.hpp>
+#include <CppRouter/MetaHandler.hpp>
+
+#include <array>
+#include <memory>
+#include <string>
 
 namespace CppRouter {
 
-template<typename... Handlers>
+template <typename... Handlers>
 class Router
 {
-public:
-    std::unique_ptr<GenericHandler> handler(const std::string& request)
+  public:
+    std::unique_ptr<GenericHandler> find(const std::string &endpoint)
     {
-        auto handler = details::RouteHandlerFinder<Handlers...>::find(request);
-        return std::move(handler);
+        for (auto& mh : handlers_)
+        {
+            auto tmp = mh.tryToGetHandler(endpoint);
+            if (tmp)
+                return std::move(tmp);
+        }
+        return nullptr;
     }
 
-    std::array<std::string, sizeof...(Handlers)> routes_ = routes_initializer();
+  private:
+    std::array<MetaHandler, sizeof...(Handlers)> handlers_ = handlers_initializer();
 
-    constexpr std::array<std::string, sizeof...(Handlers)> routes_initializer()
+    constexpr std::array<MetaHandler, sizeof...(Handlers)> handlers_initializer()
     {
-        return { Handlers::route ... };
+        return {MetaHandler::make<Handlers>()...};
     }
 };
 
-template<typename... Handlers>
+template <typename... Handlers>
 auto make_router()
 {
     return Router<Handlers...>();
