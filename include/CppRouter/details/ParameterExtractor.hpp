@@ -9,20 +9,16 @@
 namespace CppRouter {
 namespace details {
 
-struct ParameterExtractor
-{
-    boost::smatch& matches_;
+struct ParameterExtractor {
+  boost::smatch &matches_;
 
-    template<typename T>
-    void operator()(const char* name, T& value)
-    {
-        value = boost::lexical_cast<T>(matches_[name]);
-    }
+  template <typename T> void operator()(const char *name, T &value) {
+    value = boost::lexical_cast<T>(matches_[name]);
+  }
 
-    void operator()(const char*, CppRouter::Constraint&)
-    {
-        // ignore
-    }
+  void operator()(const char *, CppRouter::Constraint &) {
+    // ignore
+  }
 };
 
 } // namespace details

@@ -5,21 +5,17 @@
 
 namespace CppRouter {
 
-struct Constraint
-{
-    const char* constraint;
+struct Constraint {
+  const char *constraint;
 
-    Constraint(const char* c)
-        : constraint(c)
-    {}
+  Constraint(const char *c) : constraint(c) {}
 };
 
-class GenericHandler
-{
+class GenericHandler {
 public:
-    virtual void handle() = 0;
+  virtual void handle() = 0;
 };
 
-}  // namespace CppRouter
+} // namespace CppRouter
 
 #endif // CPPROUTER_GENERICHANDLER_HPP

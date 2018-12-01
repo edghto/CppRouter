@@ -9,15 +9,12 @@
 namespace CppRouter {
 namespace details {
 
-struct ParameterManager
-{
-    template<typename T>
-    void operator()(const char* name, T& value)
-    {
-        parameterConstraints[name] = CppRouter::DefaultConstraints::get(value);
-    }
+struct ParameterManager {
+  template <typename T> void operator()(const char *name, T &value) {
+    parameterConstraints[name] = CppRouter::DefaultConstraints::get(value);
+  }
 
-    std::map<std::string, std::string> parameterConstraints;
+  std::map<std::string, std::string> parameterConstraints;
 };
 
 } // namespace details

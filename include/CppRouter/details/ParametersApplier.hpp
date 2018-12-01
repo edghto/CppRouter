@@ -9,16 +9,16 @@
 namespace CppRouter {
 namespace details {
 
-template<typename RouteHandler>
-struct ParametersApplier {
-    boost::smatch matches;
+template <typename RouteHandler> struct ParametersApplier {
+  boost::smatch matches;
 
-    typename RouteHandler::Params operator()() {
-        typename RouteHandler::Params params{};
-        ParameterExtractor extractor{matches};
-        StructIterator::Fusion<typename RouteHandler::Params>::for_each(params, extractor);
-        return params;
-    }
+  typename RouteHandler::Params operator()() {
+    typename RouteHandler::Params params{};
+    ParameterExtractor extractor{matches};
+    StructIterator::Fusion<typename RouteHandler::Params>::for_each(params,
+                                                                    extractor);
+    return params;
+  }
 };
 
 } // namespace details

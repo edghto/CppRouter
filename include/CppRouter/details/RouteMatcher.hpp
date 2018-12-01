@@ -10,60 +10,52 @@
 
 #include <string>
 
-namespace CppRouter
-{
-namespace details
-{
+namespace CppRouter {
+namespace details {
 
-template <typename RouteHandler>
-struct RouteMatcher
-{
-    RouteMatcher()
-    {
-        auto routeDesc = std::string(RouteHandler::route);
-        auto constraints = parameterConstraints();
-        route_ = constructRoute(routeDesc, constraints);
+template <typename RouteHandler> struct RouteMatcher {
+  RouteMatcher() {
+    auto routeDesc = std::string(RouteHandler::route);
+    auto constraints = parameterConstraints();
+    route_ = constructRoute(routeDesc, constraints);
+  }
+
+  bool operator()(boost::smatch &matches, const std::string &request) const {
+    return match(matches, request);
+  }
+
+private:
+  std::string constructRoute(
+      const std::string &routeDesc,
+      decltype(ParameterManager::parameterConstraints) &constraints) {
+    std::string route = routeDesc;
+    for (auto constraint : constraints) {
+      // TODO: Replace boost format with something newer.
+      auto paramPlaceHolder =
+          boost::regex(str(boost::format("\\{%s\\}") % constraint.first));
+      auto paramConstraint = str(boost::format("(?<%s>%s)") % constraint.first %
+                                 constraint.second);
+      route = boost::regex_replace(route, paramPlaceHolder, paramConstraint);
     }
 
-    bool operator()(boost::smatch &matches, const std::string &request) const
-    {
-        return match(matches, request);
-    }
+    return route;
+  }
 
-  private:
-    std::string constructRoute(const std::string &routeDesc,
-                               decltype(ParameterManager::parameterConstraints) &constraints)
-    {
-        std::string route = routeDesc;
-        for (auto constraint : constraints)
-        {
-            // TODO: Replace boost format with something newer.
-            auto paramPlaceHolder = boost::regex(str(boost::format("\\{%s\\}") % constraint.first));
-            auto paramConstraint = str(boost::format("(?<%s>%s)") % constraint.first % constraint.second);
-            route = boost::regex_replace(route,
-                                         paramPlaceHolder,
-                                         paramConstraint);
-        }
+  decltype(ParameterManager::parameterConstraints) parameterConstraints() {
+    typename RouteHandler::Params params{};
+    ParameterManager parameterManager{};
+    StructIterator::Fusion<typename RouteHandler::Params>::for_each(
+        params, parameterManager);
 
-        return route;
-    }
+    return std::move(parameterManager.parameterConstraints);
+  }
 
-    decltype(ParameterManager::parameterConstraints) parameterConstraints()
-    {
-        typename RouteHandler::Params params{};
-        ParameterManager parameterManager{};
-        StructIterator::Fusion<typename RouteHandler::Params>::for_each(params, parameterManager);
+  bool match(boost::smatch &matches, const std::string &request) const {
+    boost::regex re(route_);
+    return boost::regex_match(request.begin(), request.end(), matches, re);
+  }
 
-        return std::move(parameterManager.parameterConstraints);
-    }
-
-    bool match(boost::smatch &matches, const std::string &request) const
-    {
-        boost::regex re(route_);
-        return boost::regex_match(request.begin(), request.end(), matches, re);
-    }
-
-    std::string route_;
+  std::string route_;
 };
 
 } // namespace details
