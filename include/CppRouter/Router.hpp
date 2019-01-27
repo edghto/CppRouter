@@ -24,7 +24,7 @@ enum class Method {
 template <typename... Handlers> class Router {
 public:
   std::unique_ptr<GenericHandler> find(const std::string &endpoint) {
-      // FIXME: There must be a cleaner way.
+    // FIXME: There must be a cleaner way.
     std::unique_ptr<GenericHandler> handler = findImpl(endpoint, getHandlers_);
     if (handler)
       return std::move(handler);
