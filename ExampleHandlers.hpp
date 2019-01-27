@@ -8,6 +8,7 @@ class PostFooAction
     : public CppRouter::GenericHandler
 {
 public:
+    using tag = CppRouter::post_tag;
     struct Params
     {
         int id;
@@ -33,6 +34,7 @@ class GetFoo
     : public CppRouter::GenericHandler
 {
 public:
+    using tag = CppRouter::get_tag;
     struct Params
     {
         int id;

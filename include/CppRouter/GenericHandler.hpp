@@ -3,6 +3,7 @@
 
 #include <boost/fusion/adapted/struct.hpp>
 
+// TODO: Rename this file to HandlerCommon or something similar.
 namespace CppRouter {
 
 struct Constraint {
@@ -10,6 +11,14 @@ struct Constraint {
 
   Constraint(const char *c) : constraint(c) {}
 };
+
+struct get_tag {};
+struct post_tag {};
+struct put_tag {};
+struct delete_tag {};
+struct patch_tag {};
+struct option_tag {};
+struct header_tag {};
 
 class GenericHandler {
 public:

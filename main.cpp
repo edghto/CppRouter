@@ -16,7 +16,7 @@ int main() {
 
   for (auto endpoint : endpoints) {
     std::cout << "endpoint: " << endpoint << std::endl;
-    auto handler = router.find(endpoint);
+    auto handler = router.findByMethod(CppRouter::Method::Get, endpoint);
     if (handler)
       handler->handle();
   }
